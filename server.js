@@ -11,6 +11,19 @@ const req_res = m => {
   }
 };
 
+// Add this to the VERY top of the first file loaded in your app
+var apm = require('elastic-apm-node').start({
+  // Override service name from package.json
+  // Allowed characters: a-z, A-Z, 0-9, -, _, and space
+  serviceName: '',
+
+  // Use if APM Server requires a token
+  secretToken: '',
+
+  // Set custom APM Server URL (default: http://localhost:8200)
+  serverUrl: '',
+});
+
 // Set dotenv if the module is available
 const dotenv = req_res('dotenv') ? require('dotenv') : null;
 

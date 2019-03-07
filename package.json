@@ -32,6 +32,7 @@
     "chart.js": "^2.7.3",
     "d3": "^5.7.0",
     "dotenv": "^6.0.0",
+    "elastic-apm-node": "^2.6.0",
     "fastify": "^2.0.0",
     "fastify-auth": "^0.4.0",
     "fastify-cors": "^2.1.2",
