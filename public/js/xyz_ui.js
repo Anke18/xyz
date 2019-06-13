@@ -1,40 +1,67 @@
-// use leaflet map control
 import _xyz from './xyz_control/index.mjs';
 
-import mobile from './views/mobile.mjs';
+// import logRocket from './logRocket.mjs';
 
-import desktop from './views/desktop.mjs';
+import mobile from '../views/mobile.mjs';
 
-import hooks from './hooks.mjs';
-
-import locales from './locales.mjs';
-
-import layerlistview from './layer/listview.mjs';
-
-import locationlistview from './location/listview.mjs';
-
-import gazetteer from './gazetteer.mjs';
+import desktop from '../views/desktop.mjs';
 
 _xyz({
-  host: document.head.dataset.dir,
+  host: document.head.dataset.dir || new String(''),
   token: document.body.dataset.token,
   log: document.body.dataset.log,
   nanoid: document.body.dataset.nanoid,
+  hooks: true,
   callback: init,
 });
 
 function init(_xyz) {
 
-  _xyz.hooks = hooks(_xyz);
+  createMap(_xyz);
+
+  // Create locales dropdown if length of locales array is > 1.
+  if (Object.keys(_xyz.workspace.locales).length > 1) _xyz.utils.dropdown({
+    title: 'Show layers for the following locale:',
+    appendTo: document.getElementById('localeDropdown'),
+    entries: _xyz.workspace.locales,
+    label: 'name',
+    val: 'loc',
+    selected: _xyz.workspace.locale.key,
+    onchange: e => {
+      _xyz.hooks.removeAll();
+      _xyz.hooks.set({locale : e.target.value});
+      _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
+      createMap(_xyz);
+    }
+  });
+
 
   // Set platform specific interface functions.
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
   if (document.body.dataset.viewmode === 'desktop') desktop(_xyz);
 
+
+  const btnWorkspace = document.getElementById('btnWorkspace');
+  if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
+
+  if (_xyz.log) console.log(_xyz);
+
+  //logRocket(document.body.dataset.logrocket);
+
+}
+
+function createMap (_xyz) {
+
+  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 0';
+
+  const attribution = {};
+  attribution[_xyz.version] = _xyz.release;
+  attribution['Leaflet'] = 'https://leafletjs.com';
+
   // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
-    locale: _xyz.hooks.current.locale,
+    attribution: attribution,
     view: {
       lat: _xyz.hooks.current.lat,
       lng: _xyz.hooks.current.lng,
@@ -52,25 +79,23 @@ function init(_xyz) {
   _xyz.tableview.create({
     target: document.getElementById('tableview'),
     btn: {
-      toggleTableview: document.getElementById('toggleTableview')
+      toggleTableview: document.getElementById('toggleTableview'),
+      tableViewport: document.getElementById('btnTableViewport')
     }
   });
 
-  // Create locales dropdown (if more than one locale in workspace).
-  locales(_xyz);
+  _xyz.layers.listview.init({
+    target: document.getElementById('layers')
+  });
 
-  // Initialize layers.
-  _xyz.layers.listview = layerlistview(_xyz);
-  _xyz.layers.listview.init();
+  _xyz.locations.listview.init({
+    target: document.getElementById('locations'),
+    clear: document.getElementById('clear_locations'),
+  });
 
-  // Initialize location listview.
-  _xyz.locations.listview = locationlistview(_xyz);
-  _xyz.locations.listview.init();
+  _xyz.gazetteer.init({
+    target: document.getElementById('gazetteer'),
+    toggle: document.getElementById('btnGazetteer'),
+  });
 
-  // Init gazetteer.
-  gazetteer(_xyz);
-  _xyz.gazetteer.init();
-
-  if (_xyz.log) console.log(_xyz);
-
-}
+};

@@ -1,12 +1,15 @@
 export default _xyz => table => {
 
-  if (!table || !table.target || !table.layer || !table.key) return;
+  //if (!table || !table.target || !table.layer || !table.key) return;
+
+  if (!table) return;
 
   if (!table.layer.tableview.tables[table.key]) return;
 
   if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'block';
-    _xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    // _xyz.tableview.node.style.display = 'block';
+    // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
 
   Object.assign(table, table.layer.tableview.tables[table.key]);
@@ -23,6 +26,8 @@ export default _xyz => table => {
 
     if(col.type === 'datetime') col.formatter = _xyz.utils.formatDateTime;
 
+    if(table.visible && table.visible.length) col.visible = table.visible.includes(col.field) ?  true : false;
+
   });
 
   table.update = () => {
@@ -38,7 +43,9 @@ export default _xyz => table => {
       locale: _xyz.workspace.locale.key,
       layer: table.layer.key,
       table: table.key,
-      viewport: !!bounds,
+      viewport: table.viewport,
+      orderby: table.orderby,
+      order: table.order,
       filter: JSON.stringify(filter),
       west: bounds && bounds.getWest(),
       south: bounds && bounds.getSouth(),
@@ -63,23 +70,77 @@ export default _xyz => table => {
     xhr.send();
 
   };
-   
+  
+
+  let stopHammertime = false;
+
   table.activate = () => {
+
+    if (_xyz.tableview && _xyz.tableview.btn && _xyz.tableview.btn.tableViewport) {
+
+      if (table.viewport) {
+        _xyz.tableview.btn.tableViewport.classList.add('active');
+
+      } else {
+        _xyz.tableview.btn.tableViewport.classList.remove('active');
+      }
+
+      _xyz.tableview.btn.tableViewport.style.display = 'block';
+    }
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
       {
         columns: table.columns,
         autoResize: true,
-        height: _xyz.tableview.height || '100%'
+        height: _xyz.tableview.height || 'auto',
+        groupBy: table.groupBy || null,
+        initialSort: table.initialSort || null,
+        groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
+        groupToggleElement: typeof(table.groupToggleElement) === undefined ? 'arrow' : table.groupToggleElement,
+        dataSorting: sorters => {
+
+          if (!sorters[0]) return;
+            
+          if (table.orderby === sorters[0].field
+              && table.order === sorters[0].dir) return;
+
+          stopHammertime = false;
+
+          table.orderby = sorters[0].field;
+
+          table.order = sorters[0].dir;
+
+          if (!stopHammertime) table.update();
+          
+        },
+        dataSorted: (sorters, rows) => {
+          stopHammertime = true;
+        },
+        rowClick: table.rowClick || rowClick,
+        groupClick: table.groupClick || null
       });
 
     table.update();
 
     _xyz.tableview.current_table = table;
 
+    function rowClick(e, row){
+      const rowData = row.getData();
+
+      if (!rowData.qid) return;
+
+      _xyz.locations.select({
+        locale: _xyz.workspace.locale.key,
+        layer: table.layer.key,
+        table: table.from,
+        id: rowData.qid,
+      });
+    }
+
   };
 
-  table.activate();
+  // active only if displayed in the navbar 
+  if(!table.tab || !table.tab.classList.contains('folded')) table.activate();
 
 };

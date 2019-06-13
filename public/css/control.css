@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-@import url("https://fonts.googleapis.com/css?family=PT+Mono");
 @font-face {
   font-family: ffmark_black;
   src: url(../fonts/MarkWeb-Black.woff) format("woff"); }
@@ -9,6 +7,57 @@
 @font-face {
   font-family: ffmark_bold;
   src: url(../fonts/MarkWebPro-Bold.woff) format("woff"); }
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/material-icons.woff2); }
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased; }
+
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+/* cyrillic-ext */
+@font-face {
+  font-family: 'PT Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local("PT Mono"), local("PTMono-Regular"), url(https://fonts.gstatic.com/s/ptmono/v6/9oRONYoBnWILk-9AnCIzM_HxEcn7Hg.woff2) format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+/* cyrillic */
+@font-face {
+  font-family: 'PT Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local("PT Mono"), local("PTMono-Regular"), url(https://fonts.gstatic.com/s/ptmono/v6/9oRONYoBnWILk-9AnCszM_HxEcn7Hg.woff2) format("woff2");
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+/* latin-ext */
+@font-face {
+  font-family: 'PT Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local("PT Mono"), local("PTMono-Regular"), url(https://fonts.gstatic.com/s/ptmono/v6/9oRONYoBnWILk-9AnCEzM_HxEcn7Hg.woff2) format("woff2");
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+/* latin */
+@font-face {
+  font-family: 'PT Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local("PT Mono"), local("PTMono-Regular"), url(https://fonts.gstatic.com/s/ptmono/v6/9oRONYoBnWILk-9AnC8zM_HxEck.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
 .locationview {
   text-align: left;
   width: 100%;
@@ -18,6 +67,8 @@
     color: #090; }
   .locationview .label {
     padding-top: 5px; }
+  .locationview a {
+    color: #090; }
   .locationview textarea {
     resize: none;
     width: 100%; }
@@ -40,11 +91,11 @@
   .locationview .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px; }
-    .locationview .val a {
-      color: #090; }
+    font-size: 12px;
+    white-space: pre-wrap; }
   .locationview .img_streetview {
-    width: 100%; }
+    width: 100%;
+    padding: 6px; }
   .locationview .num {
     text-align: right; }
   .locationview .table-section .t-expander {
@@ -100,45 +151,66 @@
     margin-right: 10px; }
 
 .tableview {
-  position: absolute;
   overflow: hidden;
-  bottom: 0;
-  right: 0;
-  width: calc(100% - 330px);
-  min-height: 40px;
-  max-height: 100%;
-  padding-left: 58px;
-  height: 40px;
-  z-index: 1001;
-  background-color: #fff;
-  box-shadow: 1px 0 1px #333; }
-  .tableview .resize_bar {
-    height: 5px; }
-    .tableview .resize_bar:hover {
-      background-color: #f9fbe7;
-      cursor: row-resize; }
+  grid-column: 3;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 57px 1fr;
+  grid-template-rows: 6px 50px 1fr;
+  z-index: 1000;
+  /* to hide static labels outside map */
+  background-color: white;
+  /* to hide static labels outside map*/ }
+  .tableview .btn_column {
+    grid-row: 2/4; }
   .tableview .nav_bar {
-    height: 50px; }
+    height: 50px;
+    font-size: 14px;
+    grid-row: 2;
+    grid-column: 2; }
   .tableview .table {
-    position: absolute;
-    width: calc(100% - 58px);
-    height: calc(100% - 55px); }
+    grid-row: 3;
+    grid-column: 2; }
   .tableview nav {
     text-align: center; }
-    .tableview nav ul {
-      display: flex;
+    .tableview nav ul.nav_bar-nav {
+      display: inline-flex;
       list-style: none;
       flex-flow: row wrap;
-      justify-content: center; }
-      .tableview nav ul li {
+      justify-content: center;
+      width: calc(100% - 30px); }
+      .tableview nav ul.nav_bar-nav li {
         padding: 5px;
         -webkit-flex: 1;
         -moz-flex: 1;
         -ms-flex: 1;
         flex: 1; }
-        .tableview nav ul li.tab-current {
+        .tableview nav ul.nav_bar-nav li.tab-current {
           border-bottom: 3px solid #090;
           box-shadow: 0 6px 8px -6px #444; }
+    .tableview nav .tab-dropdown-container {
+      width: 20px;
+      display: inline-flex; }
+      .tableview nav .tab-dropdown-container button.tab-dropdown {
+        width: 30px;
+        font-size: 14px;
+        display: none;
+        color: #090; }
+      .tableview nav .tab-dropdown-container .tab-dropdown-content {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 10px;
+        padding: 4px;
+        background-color: #fff;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 2px rgba(0, 0, 0, 0.3);
+        z-index: 1000; }
+        .tableview nav .tab-dropdown-container .tab-dropdown-content.show {
+          display: block !important; }
+        .tableview nav .tab-dropdown-container .tab-dropdown-content li {
+          padding: 5px; }
 
 .input_group {
   width: 100%; }
@@ -179,8 +251,7 @@
   margin-top: -2px;
   width: 100%;
   position: relative;
-  overflow: hidden;
-  display: none; }
+  overflow: hidden; }
 
 .loader:before {
   display: block;
@@ -277,19 +348,64 @@ input[type=range]::-moz-range-thumb {
   .md_drop .ul--show {
     display: block; }
 
+.xyz-custom-select {
+  position: relative;
+  /* style the arrow inside the select element */
+  /* point the arrow upwards when the select box is open (active) */
+  /* style the items (options), including the selected item */
+  /* style items (options) */
+  /* hide the items when the select box is closed */ }
+  .xyz-custom-select select {
+    display: none; }
+  .xyz-custom-select .select-selected {
+    background-color: white; }
+  .xyz-custom-select .select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #000 transparent transparent transparent; }
+  .xyz-custom-select .select-selected.select-arrow-active:after {
+    border-color: transparent transparent #000 transparent;
+    top: 7px; }
+  .xyz-custom-select .select-items div,
+  .xyz-custom-select .select-selected {
+    color: #000;
+    padding: 5px 5px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none; }
+  .xyz-custom-select .select-items {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2); }
+  .xyz-custom-select .select-hide {
+    display: none; }
+  .xyz-custom-select .select-items div:hover, .xyz-custom-select .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1); }
+
+/*#layers */
 .qs-datepicker {
   position: fixed;
   left: 40px;
   top: -10000px;
+  display: flex;
   /*transform: translateY(-50%);
   -webkit-transform: translateY(-50%);*/ }
 
-/*transform: translateY(50%);
--webkit-transform: translateY(50%);*/
-/*transform: translate(20%, 340%);
--webkit-transform: translate(20%, 340%);*/
 .qs-datepicker {
   color: #000;
+  /*//position: fixed;
+  //transform: translate(20%, 340%);
+  //-webkit-transform: translate(20%, 340%);*/
   width: 250px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -324,7 +440,7 @@ input[type=range]::-moz-range-thumb {
   transform:translate(-50%,-50%);*/ }
 
 .qs-datepicker.qs-hidden {
-  display: none;
+  /*display:none;*/
   top: -10000px; }
 
 .qs-datepicker .qs-overlay {
@@ -535,6 +651,55 @@ input[type=range]::-moz-range-thumb {
 .qs-datepicker .qs-square:not(.qs-empty):not(.qs-disabled):not(.qs-day):not(.qs-active):hover {
   background: #090; }
 
+.doc-container {
+  overflow-x: scroll;
+  /*position: absolute;*/
+  bottom: 0;
+  width: 100%; }
+  .doc-container td, .doc-container div {
+    position: relative;
+    padding: 5px;
+    /* wrap long text without spaces */
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    /* Firefox */
+    white-space: -pre-wrap;
+    /* Opera <7 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* IE */
+    word-break: break-all; }
+    .doc-container td i, .doc-container div i {
+      color: #090;
+      font-size: 20px;
+      vertical-align: middle; }
+    .doc-container td button, .doc-container div button {
+      display: block;
+      background: none;
+      position: absolute;
+      border: none; }
+      .doc-container td button.btn_del, .doc-container div button.btn_del {
+        right: 6px;
+        top: 10px; }
+      .doc-container td button.btn_save, .doc-container div button.btn_save {
+        left: 5px;
+        bottom: 14px; }
+      .doc-container td button :hover, .doc-container div button :hover {
+        cursor: pointer; }
+      .doc-container td button i, .doc-container div button i {
+        padding: 1px;
+        width: 30px;
+        height: 30px;
+        font-size: 28px;
+        color: #090;
+        align-content: center;
+        border-radius: 5px;
+        background-color: #fff;
+        opacity: 0.9;
+        border: 1px solid #cf7;
+        box-shadow: 2px 2px 1px #cf7; }
+
 .bar {
   fill: #5AB664 !important;
   width: 10px; }
@@ -578,7 +743,7 @@ input[type=range]::-moz-range-thumb {
   .checkbox .checkbox_i {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -3px;
     height: 0;
     width: 0;
     font-size: 22px;
@@ -590,6 +755,8 @@ input[type=range]::-moz-range-thumb {
   .checkbox input[type=checkbox]:checked + .checkbox_i:after {
     font-family: "Material Icons";
     content: '\E834'; }
+  .checkbox input[type=checkbox]:disabled + .checkbox_i:after {
+    color: #999; }
 
 button {
   border: none;
@@ -608,17 +775,14 @@ button {
   padding: 8px 0px 8px 0px; }
 
 .btn_column {
-  top: 0;
   z-index: 999; }
   .btn_column.lv0 {
     box-shadow: inset 2px 0 4px -4px #777; }
   .btn_column.lv1 {
     box-shadow: inset 5px 0 4px -4px #777; }
   .btn_column.desktop {
-    position: absolute;
-    left: 0;
+    z-index: 999;
     background-color: #fff;
-    height: 100%;
     padding: 4px;
     opacity: 0.8; }
   .btn_column.mobile {
@@ -628,8 +792,6 @@ button {
     .btn_column.mobile > div {
       box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
       border-radius: 50%; }
-  .btn_column div:hover {
-    cursor: pointer; }
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
@@ -658,7 +820,8 @@ button {
       color: #fff; }
     .btn_column button:disabled,
     .btn_column > div:disabled {
-      opacity: 0.3; }
+      opacity: 0.3;
+      cursor: default; }
     .btn_column button:hover:enabled,
     .btn_column > div:hover:enabled {
       cursor: pointer; }
@@ -686,10 +849,17 @@ button {
   text-align: center;
   font-weight: 600;
   color: #090;
-  box-shadow: 1px 1px 3px #383836;
-  margin: 5px 2px 5px 1px; }
+  box-shadow: 1px 1px 2px #999999;
+  margin: 5px 2px 5px 1px;
+  width: calc(100% - 5px); }
   .btn_wide.disabled {
-    opacity: 0.3; }
+    opacity: 0.3;
+    cursor: default; }
+  .btn_wide:disabled {
+    opacity: 0.3;
+    cursor: default; }
+  .btn_wide:hover:enabled {
+    cursor: pointer; }
 
 .btn_state {
   color: #090; }
@@ -1099,9 +1269,9 @@ button {
     font-family: ffmark_black, sans-serif;
     font-size: 40px; }
   .attribution a {
-    margin-left: 10px; }
-  .attribution a:hover {
-    border-bottom: 4px solid #cf9; }
+    margin-left: 10px;
+    white-space: nowrap;
+    display: inline-block; }
 
 /* Tabulator v4.1.3 (c) Oliver Folkerd */
 .tabulator {
@@ -1537,6 +1707,9 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
+  .tabulator-row .tabulator-cell div div {
+    display: block !important;
+    vertical-align: middle; }
 
 .tabulator-row .tabulator-cell:last-of-type {
   border-right: none; }
@@ -1766,6 +1939,19 @@ button {
   .map div.leaflet-select-pane svg > g path {
     filter: url(#dropshadow); }
 
+.hover-box {
+  position: fixed;
+  margin: 0;
+  padding: 5px;
+  background: #eee;
+  box-shadow: 2px 2px 2px #666;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+  opacity: 0;
+  z-index: 998;
+  font-size: 13px; }
+
 .leaflet-interactive.wait-cursor-enabled {
   cursor: wait !important; }
 
@@ -1802,30 +1988,47 @@ button {
     max-height: 2500px; }
     .listview .drawer.expanded .expander::before {
       content: "expand_less"; }
-  .listview .drawer.drawer-group .header-group {
-    font-family: ffmark_bold, sans-serif !important;
-    font-size: 15px !important;
-    line-height: 2; }
-    .listview .drawer.drawer-group .header-group:hover {
-      cursor: pointer; }
-  .listview .drawer.drawer-group.expandable-group {
-    max-height: 30px;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out; }
-    .listview .drawer.drawer-group.expandable-group .expander-group::before {
-      content: "expand_more"; }
-  .listview .drawer.drawer-group.expanded-group {
-    max-height: 2500px; }
-    .listview .drawer.drawer-group.expanded-group .expander-group::before {
-      content: "expand_less"; }
+  .listview .drawer.drawer-group {
+    /*div:not(:first-child){*/
+    /*font-style: italic;
+    padding-left: 12px;*/
+    /*}*/ }
+    .listview .drawer.drawer-group .header {
+      font-style: italic;
+      margin-left: 12px;
+      border-bottom: 1px solid #bbb; }
+    .listview .drawer.drawer-group .dashboard {
+      margin-left: 12px; }
+    .listview .drawer.drawer-group .header-group {
+      font-family: ffmark_bold, sans-serif !important;
+      font-size: 15px !important;
+      line-height: 2; }
+      .listview .drawer.drawer-group .header-group:hover {
+        cursor: pointer; }
+    .listview .drawer.drawer-group.expandable-group {
+      max-height: 30px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out; }
+      .listview .drawer.drawer-group.expandable-group .expander-group::before {
+        content: "expand_more"; }
+    .listview .drawer.drawer-group.expanded-group {
+      max-height: 2500px; }
+      .listview .drawer.drawer-group.expanded-group .expander-group::before {
+        content: "expand_less"; }
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
-    font-family: ffmark, sans-serif; }
+    font-family: ffmark, sans-serif;
+    border-bottom: 2px solid #333; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {
       background-image: linear-gradient(white, #cf9); }
+  .listview .drawer .meta {
+    margin-top: 5px; }
+    .listview .drawer .meta a {
+      color: #090;
+      font-weight: 600; }
   .listview .drawer .dashboard {
     border-bottom: 1px solid #333;
     font-size: 14px; }
@@ -1833,11 +2036,6 @@ button {
       font-family: ffmark_bold, sans-serif;
       font-size: 14px;
       margin-bottom: 7px; }
-    .listview .drawer .dashboard .meta {
-      margin-top: 5px; }
-      .listview .drawer .dashboard .meta a {
-        color: #090;
-        font-weight: 600; }
     .listview .drawer .dashboard .legend > svg {
       width: 100%; }
     .listview .drawer .dashboard .panel {
@@ -1862,6 +2060,8 @@ button {
     .listview .drawer .dashboard .block {
       padding: 5px 0;
       position: relative; }
+      .listview .drawer .dashboard .block input {
+        width: 100%; }
       .listview .drawer .dashboard .block .cancel-btn {
         color: #090;
         font-size: 20px;
@@ -1909,16 +2109,15 @@ button {
       .listview .drawer .dashboard .third.right {
         float: right; }
 
-#Gazetteer {
-  display: none;
+.gazetteer {
   background-color: #fff; }
-  #Gazetteer .clear {
+  .gazetteer .clear {
     position: absolute;
     top: 0;
     right: 0;
     font-size: 33px;
     color: #090; }
-  #Gazetteer .clear-mask {
+  .gazetteer .clear-mask {
     position: absolute;
     top: 0;
     right: 0;
@@ -1927,10 +2126,15 @@ button {
     text-align: right;
     line-height: 2;
     color: white; }
-  #Gazetteer input {
+  .gazetteer input {
     width: 100%;
-    font-size: 20px; }
-  #Gazetteer > ul {
+    font-size: 20px;
+    box-shadow: 0 3px 3px -3px #000; }
+  .gazetteer .bar {
+    position: relative;
+    display: block;
+    width: 100%; }
+  .gazetteer > ul {
     -webkit-padding-start: 0;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -1938,10 +2142,30 @@ button {
     position: absolute;
     background-color: white;
     margin: 0;
-    padding: 0;
+    padding: 0 6px 0 0;
     z-index: 999;
     box-shadow: 0 3px 3px -3px #000;
-    width: 100%; }
+    /*width: 100%;*/ }
+
+.workspace {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1002;
+  background-color: #fff;
+  grid-column: 3;
+  grid-row: 1;
+  overflow-y: scroll; }
+  .workspace .btn_column {
+    position: fixed;
+    height: 100%;
+    padding: 4px;
+    background-color: #fff;
+    box-shadow: inset 2px 0 4px -4px #777; }
+  .workspace .codemirror {
+    position: absolute;
+    right: 0;
+    width: calc(100% - 50px); }
 
 *,
 *::after,
@@ -1988,12 +2212,21 @@ i,
   visibility: hidden; }
 
 .displaynone {
-  display: none; }
+  display: none !important; }
 
 .bold {
   font-weight: 800; }
 
 .pane_shadow {
   box-shadow: 0 3px 3px -3px #000; }
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  /* Chrome */
+  margin: 0; }
+
+input[type=number] {
+  -moz-appearance: textfield;
+  /* Firefox */ }
 
 /*# sourceMappingURL=control.css.map */

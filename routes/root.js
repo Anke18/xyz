@@ -1,4 +1,4 @@
-module.exports = {route, view};
+const env = require('../mod/env');
 
 // Create constructor for mobile detect module.
 const Md = require('mobile-detect');
@@ -9,48 +9,63 @@ const jsr = require('jsrender');
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
 
+const fetch = require('node-fetch');
+
+module.exports = {route, view};
+
 function route(fastify) {
 
   fastify.route({
     method: 'GET',
     url: '/',
-    preHandler: fastify.auth([fastify.authAccess]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true,
+        login: true
+      })
+    ]),
     handler: view
   });
 
   fastify.route({
     method: 'POST',
     url: '/',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => fastify.login.post(req, res, {
+      view: view
+    })
   });
 
 };
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace[token.access].config;
-
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
 
-  const tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    jsr.templates('./public/views/desktop.html') :
-    jsr.templates('./public/views/mobile.html');
+  const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
 
-  // Build the template with jsrender and send to client.
+  const tmpl = jsr.templates('tmpl', await _tmpl.text());
+
+  //Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
-    dir: global.dir,
-    title: config.title || 'GEOLYTIX | XYZ',
+    dir: env.path,
+    title: env.workspace.title || 'GEOLYTIX | XYZ',
+    user: token.email || '""',
     nanoid: nanoid(6),
-    token: req.query.token || token.signed,
-    log: process.env.LOG_LEVEL ? 'true' : 'false',
-    btnDocumentation: config.documentation ? '' : 'style="display: none;"',
-    hrefDocumentation: config.documentation ? config.documentation : '',
-    btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
+    token: req.query.token || token.signed || '""',
+    log: env.logs || '""',
+    btnDocumentation: env.workspace.documentation ? '' : 'style="display: none;"',
+    hrefDocumentation: env.workspace.documentation ? env.workspace.documentation : '',
+    btnLogin: env.acl_connection ? '' : 'style="display: none;"',
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
-    btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"'
+    btnLogin_text: token.email || 'anonymous (public)',
+    btnAdmin: token.admin_user ? '' : 'style="display: none;"',
+    btnEditor: token.admin_workspace ? '' : 'style="display: none;"',
+    logrocket: env.logrocket || '""',
+    btnLogRocket: env.logrocket ? '' : 'style="display: none;"',
   }));
 
 };

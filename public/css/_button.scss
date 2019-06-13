@@ -25,10 +25,10 @@ button {
         box-shadow: inset 5px 0 4px -4px #777;
     }
     &.desktop {
-        position: absolute;
-        left: 0;
+        // position: absolute;
+        z-index: 999;
         background-color: #fff;
-        height: 100%;
+        // height: 100%;
         padding: 4px;
         opacity: 0.8;
     }
@@ -41,11 +41,11 @@ button {
             border-radius: 50%;
         }
     }
-    top: 0;
+    // top: 0;
     z-index: 999;
-    div:hover {
-        cursor: pointer;
-    }
+    // div:hover {
+    //     cursor: pointer;
+    // }
     button,
     >div {
         margin-top: 10px;
@@ -74,6 +74,7 @@ button {
         }
         &:disabled {
             opacity: 0.3;
+            cursor: default;
         }
         &:hover:enabled {
             cursor: pointer;
@@ -107,10 +108,19 @@ button {
     text-align: center;
     font-weight: 600;
     color: $glxgreen;
-    box-shadow: 1px 1px 3px #383836;
+    box-shadow: 1px 1px 2px #999999;
     margin: 5px 2px 5px 1px;
+    width: calc(100% - 5px);
     &.disabled {
         opacity: 0.3;
+        cursor: default;
+    }
+    &:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+    &:hover:enabled {
+        cursor: pointer;
     }
 }
 

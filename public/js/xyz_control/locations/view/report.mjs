@@ -1,15 +1,23 @@
 export default _xyz => entry => {
 
-  entry.row.classList.add('tr_report');
+  if (!entry.report.template) return;
 
-  entry.row.appendChild(
-    _xyz.utils.hyperHTML.wire()`
-    <td style="padding: 10px 0;" colSpan=2>
-      <a
-        style="color: #090;"
-        target="_blank"
-        href="${_xyz.host + '/report?layer=' + entry.location.layer  + '&id=' + entry.location.id + '&locale=' + _xyz.workspace.locale.key + '&token=' + _xyz.token}"
-        >Site Report`
+  const href = _xyz.host + '/report?' + _xyz.utils.paramString(
+    Object.assign(
+      entry.report,
+      {
+        locale: _xyz.workspace.locale.key,
+        layer: entry.location.layer,
+        table: entry.location.table,
+        id: entry.location.id,
+        token: _xyz.token
+      }
+    )
   );
+
+  entry.row.appendChild(_xyz.utils.wire()`
+    <td style="padding: 10px 0;" colSpan=2>
+    <a target="_blank" href="${href}">${entry.report.name || 'Location Report'}</a>
+    </td>`);
 
 };

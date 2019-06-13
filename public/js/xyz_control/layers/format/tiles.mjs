@@ -1,6 +1,6 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
-  if (!layer.display) return layer.remove();
+  if (!layer.display) return ;//layer.remove();
 
   // Return from layer get once added to map.
   if (layer.loaded) return;
@@ -8,18 +8,21 @@ export default (_xyz, layer) => () => {
 
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
-  let uri = layer.URI.indexOf('provider') > 0 ?
-    _xyz.host + '/proxy/request?uri=' + layer.URI + '&token=' + _xyz.token :
+  const uri = layer.URI.indexOf('provider') > 0 ?
+    _xyz.host + '/proxy/request?' + _xyz.utils.paramString({
+      uri: layer.URI,
+      token: _xyz.token
+    }) :
     layer.URI;
 
     // Assign the tile layer to the layer L object and add to map.
-  layer.L = L.tileLayer(uri, {
+  layer.L = L.tileLayer(decodeURIComponent(uri), {
     updateWhenIdle: true,
     pane: layer.key
   })
     .on('load', () => {
       
-      if (layer.loader)  layer.loader.style.display = 'none';
+      if (layer.view.loader)  layer.view.loader.style.display = 'none';
 
     })
     .addTo(_xyz.map);

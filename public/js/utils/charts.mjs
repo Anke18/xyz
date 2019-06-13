@@ -12,6 +12,9 @@ export default (group) => {
 
   const canvas = createElement({
     tag: 'canvas',
+    options: {
+      height: group.chart.height || undefined
+    },
     appendTo: graph
   });
 
@@ -21,7 +24,7 @@ export default (group) => {
 
   const labels = stacked_labels.length > 1 ? stacked_labels : group.fields.map(field => field.label);
 
-  const data = group.fields.map(field => field.value);
+  const data = group.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
 
   const displayValues = group.fields.map(field => field.displayValue);
 
@@ -52,12 +55,16 @@ export default (group) => {
     Object.values(tmp).map(val => datasets.push(val));
 
   } else {
+
+    if(group.chart.excludeNull) data.map(item => {if(!item) labels.splice(data.indexOf(item), 1) });
+
     datasets[0] = {
       label: group.label,
       backgroundColor: group.chart.backgroundColor || '#cf9',
       borderColor: group.chart.borderColor || '#079e00',
-      data: data
+      data: group.chart.excludeNull ? data.filter(item => {return item != null}) : data
     };
+
   };
 
   new Chart(canvas, {
@@ -67,6 +74,13 @@ export default (group) => {
       datasets: datasets
     },
     options: {
+      //spanGaps: true,
+      title: {
+        display: group.chart.title || true,
+        position: 'bottom',
+        text: group.label
+
+      },
       responsive: true,
       legend: {
         display: group.chart.legend
@@ -89,19 +103,22 @@ export default (group) => {
               stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
             }
           ],
-        xAxes: (!stacked_labels.length || stacked_labels.length < 1) ? [] : 
+        xAxes: (!stacked_labels.length || stacked_labels.length < 1 || group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : 
           [{
             stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
           }]
       },
       tooltips: {
         mode: 'index',
-        intersect: false,
+        xAlign: group.chart.xAlign || null,
+        yAlign: group.chart.yAlign || null,
+        //intersect: false,
         callbacks: {
           title: () =>  ''//,
           /*label: (tooltipItem, data) => {
-            return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
-          }*/
+          return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
+          }
+        }*/
         }
       }
     }

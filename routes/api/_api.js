@@ -12,6 +12,8 @@ module.exports = fastify => {
 
   require('./layer/extent')(fastify);
 
+  require('./layer/count')(fastify);  
+
   require('./layer/geojson')(fastify);
 
   require('./layer/grid')(fastify);  
@@ -24,7 +26,11 @@ module.exports = fastify => {
 
   require('./location/field_range')(fastify);
 
+  require('./location/field')(fastify);
+
   require('./location/table')(fastify);
+
+  require('./location/list')(fastify);
 
   // location/edit
 
@@ -33,6 +39,10 @@ module.exports = fastify => {
   require('./location/edit/image_delete')(fastify);
 
   require('./location/edit/image_upload')(fastify);
+
+  require('./location/edit/document_delete')(fastify);
+
+  require('./location/edit/document_upload')(fastify);
 
   require('./location/edit/isoline_mapbox')(fastify);
 

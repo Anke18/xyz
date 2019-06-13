@@ -1,10 +1,28 @@
+const env = require('../../../mod/env');
+
+const sql_filter = require('../../../mod/pg/sql_filter');
+
 module.exports = fastify => {
+
   fastify.route({
     method: 'GET',
     url: '/api/layer/cluster',
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
     schema: {
       querystring: {
-        locale: { type: 'string' }
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table']
       },
       response: {
         200: {
@@ -20,64 +38,37 @@ module.exports = fastify => {
         }
       }
     },
-    preHandler: fastify.auth([fastify.authAPI]),
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['cat']);
+      },
+    ],
     handler: async (req, res) => {
-
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-      const table = req.query.table;
-
-      // Return 406 if table is not defined as request parameter.
-      if (!table) return res.code(406).send('Missing table.');
-  
+ 
       let
+        layer = req.params.layer,
+        table = req.query.table,
         geom = layer.geom,
         cat = req.query.cat || null,
         size = req.query.size || 1,
         theme = req.query.theme,
-        filter = req.query.filter && JSON.parse(req.query.filter),
+        filter = req.params.filter,
         kmeans = parseInt(1 / req.query.kmeans),
+        kmeans_only = false,
         dbscan = parseFloat(req.query.dbscan),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);
-  
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, cat]
-        .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
-  
-      const access_filter = layer.access_filter
-        && token.email
-        && layer.access_filter[token.email.toLowerCase()] ?
-        layer.access_filter[token.email] :
-        null;
-
-      Object.assign(filter, access_filter);
+          
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
-
-      // // Set log table filter.
-      // let qLog = layer.log_table ? `
-      // ( SELECT *, ROW_NUMBER() OVER (
-      //     PARTITION BY ${layer.qID}
-      //     ORDER BY ((${layer.log_table.field || 'log'} -> 'time') :: VARCHAR) :: TIMESTAMP DESC ) AS rank
-      //   FROM ${log_table}
-      // ) AS logfilter` : null;
-  
+      const filter_sql = filter && await sql_filter(filter) || ''; 
 
       // Query the feature count from lat/lng bounding box.
       var q = `
@@ -105,7 +96,7 @@ module.exports = fastify => {
             0.00001)
         ${filter_sql};`;
   
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   
@@ -114,13 +105,15 @@ module.exports = fastify => {
   
       let
         count = rows[0].count,
-        xExtent = rows[0].xextent,
         xEnvelope = rows[0].xenvelope;
+
+      if (count > 1000) {
+        kmeans *= 2;
+        kmeans_only = true;
+      }
   
       if (kmeans >= count) kmeans = count;
-  
-      //if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
-  
+   
       dbscan *= xEnvelope;
 
       const kmeans_sql = `
@@ -147,7 +140,7 @@ module.exports = fastify => {
         kmeans_cid,
         ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (${kmeans_sql}) kmeans`;
-  
+ 
 
       if (!theme) var q = `
       SELECT
@@ -155,7 +148,7 @@ module.exports = fastify => {
         SUM(size) size,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'categorized') var q = `
@@ -165,17 +158,17 @@ module.exports = fastify => {
         array_agg(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'};`;
   
 
       if (theme === 'graduated') var q = `
       SELECT
         count(1) count,
         SUM(size) size,
-        SUM(cat) cat,
+        ${req.query.aggregate || 'sum'}(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'competition') var q = `
@@ -198,7 +191,7 @@ module.exports = fastify => {
       ) cluster GROUP BY kmeans_cid, dbscan_cid;`;
   
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
         
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   
