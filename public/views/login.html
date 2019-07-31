@@ -38,9 +38,47 @@
 
 <body class="login_form">
 
-		<div class="container-login100" style="background-image: url('{{:dir}}/img/002.jpg');">
+    <div class="container-login100" style="background-image: url('{{:dir}}/img/002.jpg');">
+      
+        <!-- NAVBAR
+        ================================================== -->
+        <div class="navbar-wrapper">
+            <div class="container">
+                <nav class="navbar navbar-custom">
+                    <div class="container">
+      
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="{{:dir}}/home">Big Butterfly Count</a>
+                        </div>
+      
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                            <li><a href="{{:dir}}/home">Home</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setting<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="{{:dir}}/guide">Tutorial</a></li>
+                                  <li role="separator" class="divider"></li>
+                                  <li class="dropdown-header">Account</li>
+                                  <li><a href="{{:dir}}/login">Log in</a></li>
+                                  <li><a href="{{:dir}}/register">Register</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#contact">Contact</a></li>
+                            </ul>
+                        </div>  
+                    </div>
+                </nav>
+            </div>
+        </div>
 		
-			<div class="wrap-login100 p-t-190 p-b-30">
+			<div class="wrap-login100 p-t-80 p-b-30">
 				
 				<div class="login100-form-avatar">
 					<img src="{{:dir}}/img/001.png" alt="AVATAR">
@@ -48,30 +86,30 @@
 
 				<span class="login100-form-title p-t-20 p-b-45">
 					Welcome
-                </span>
+        </span>
                 
-                <form action="{{:action}}" method="post">
-					<div class="wrap-input100 validate-input m-b-10">
-						<input
-                        id="auth_user_email"
-                        class="input100"
-						name="email"
-						type="email"
-						autocomplete="email"
-						placeholder="email"
-						required 
-						maxlength="50">
+        <form action="{{:action}}" method="post">
+				<div class="wrap-input100 validate-input m-b-10">
+					<input
+            id="auth_user_email"
+            class="input100"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="email"
+            required 
+            maxlength="50">
 
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-user"></i>
-						</span>
-					</div>
+					<span class="focus-input100"></span>
+					<span class="symbol-input100">
+						<i class="fa fa-user"></i>
+					</span>
+				</div>
 					
 					<div class="wrap-input100 validate-input m-b-10">
 						<input 
-                        id="auth_user_password"
-                        class="input100"
+            id="auth_user_password"
+            class="input100"
 						name="password" 
 						type="password"
 						placeholder="password"
@@ -90,20 +128,20 @@
 							Login
 						</button>
 					</div>
-                    <br>
-
+          <br>
+<!--
 					<p>Your account must be verified by following a verification link sent to the email address and approved by 
-					an administrator before you are able to log in.</p>
+          an administrator before you are able to log in.</p>
+-->
 					<br>
 					<div>
-						<a class="switch" href="{{:dir}}/register" style="color:rgb(231, 247, 224)">
-                            Register a new account or reset your password? 
-                            <i class="fa fa-long-arrow-right"></i>
+						<a class="pull-right" href="{{:dir}}/register">
+                    Register a new account or forget password? &raquo;
 						</a>
 					</div>
 
 				</form>
-			</div>
+      </div>
 		</div>
 	
         <script src="https://www.google.com/recaptcha/api.js?render={{:captcha}}"></script>

@@ -6,6 +6,16 @@ module.exports = fastify => {
 
   require('./mobile').route(fastify);
 
+  require('./home').route(fastify);
+
+  require('./guide').route(fastify);
+
+  require('./species').route(fastify);
+
+  require('./species_lwhite').route(fastify);
+
+  require('./form').route(fastify);
+
   fastify.login.route(fastify);
   
   require('./register')(fastify);
