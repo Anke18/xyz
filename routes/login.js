@@ -44,7 +44,7 @@ module.exports = fastify => {
 
       const captcha_verification = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${env.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
   
-      if (captcha_verification.score < 0.6) return res.redirect(env.path + '/login?msg=fail');
+      if (captcha_verification.score < 0.6) return res.redirect(env.path + '/form');
 
     }
 

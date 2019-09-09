@@ -23,7 +23,9 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const _tmpl = await fetch(env.home || `${env.http || 'https'}://${req.headers.host}${env.path}/views/home.html`);
+  const _tmpl = await fetch(env.home || `${env.http || 
+    
+    'https'}://${req.headers.host}${env.path}/views/home.html`);
 
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 

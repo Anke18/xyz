@@ -1,210 +1,205 @@
 <!DOCTYPE html>
-
-<!--====
-    source: https://v3.bootcss.com/examples/carousel/
-===-->
-
 <html lang="en">
-
-  <head data-dir="{{:dir}}">
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico">
-
-    <title>XYZ | Select Species</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="{{:dir}}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="{{:dir}}/vendor/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="{{:dir}}/vendor/bootstrap/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Custom styles for this template -->
-    <link href="{{:dir}}/vendor/bootstrap/css/speciesinfo.css" rel="stylesheet">
-
-    <!-- <script src="https://cdn.logrocket.com/LogRocket.min.js"></script> -->
-
-    <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
-
-    <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
-    <script src="{{:dir}}/codemirror/codemirror.js" defer></script>
-    <script src="{{:dir}}/codemirror/javascript.js" defer></script>
-    <script src="{{:dir}}/codemirror/jsonlint.js" defer></script>
-    <script src="{{:dir}}/codemirror/lint.js" defer></script>
-    <script src="{{:dir}}/codemirror/lintjson.js" defer></script>
-
-    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
-
-  </head>
-
-<!-- NAVBAR
-================================================== -->
-  <body>
-
-    <div class="container-login100" style="background-image: url('{{:dir}}/img/666.jpg');">
-      
-      <div class="navbar-wrapper">
-          <div class="container">
-              <nav class="navbar navbar-custom">
-                  <div class="container">
-
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                          <span class="sr-only">Toggle navigation</span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">Big Butterfly Count</a>
-                    </div>
-
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                          <li><a href="{{:dir}}/home">Home</a></li>
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setting<span class="caret"></span></a>
-                              <ul class="dropdown-menu">
-                                <li><a href="{{:dir}}/guide">Tutorial</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li class="dropdown-header">Account</li>
-                                <li><a href="{{:dir}}/login">Log in</a></li>
-                                <li><a href="{{:dir}}/register">Register</a></li>
-                              </ul>
-                          </li>
-                          <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </div>
-
-                  </div>
-              </nav>
-          </div>
-      </div>
-
-      <div class="card">
-      
-        <!-- Carousel
-        ================================================== -->
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      
-            <div class="carousel-inner" role="listbox">
-              <div class="item active">
-                <img class="first-slide" src="{{:dir}}/img/butterfly/lwhite/1.jpg" alt="First slide">
-              </div>
-
-        </div><!-- /.carousel -->
-
-        <!-- Marketing messaging and featurettes
-        ================================================== -->
-        <!-- Wrap the rest of the page in another container to center all the content. -->
-
-        <div class="container marketing">
-            
-          <div class="s-intro">
-          
-          <br>
-          <h2 class="s-heading2">Species Selected</h2>
-          <h4 class="s-heading" style="font-style: oblique"> Large White / Pieris brassicae</h4><br>
-          <p class="s-body" style="font-size: larger"> A large, strong flying butterfly. The brilliant white wings have black tips to the forewings, extending down the wing edge. Females have two spots on the forewings, which is not present in males. The undersides are a creamy white with two spots. </p>
-          <br>
-          <p class="s-heading2" > Number </p>
-          <p class="s-body" style="font-size: larger"> &middot; A large, strong flying butterfly. </p>
-
-          <br>
-          <p class="s-heading2"> Date </p>
-          <p class="s-body" style="font-size: larger"> &middot; A large, strong flying butterfly. </p>
-          <br>
-          <p class="s-heading2"> Area or Habitat </p>
-          <p class="s-body" style="font-size: larger"> A large, strong flying butterfly. </p>
-          <br>
-          <p class="s-heading2"> Location </p>
-          
-          <button id="btnLocate" title="Current location" style="display: none;">
-            <i class="material-icons">gps_not_fixed</i>
-          </button>
-<!-- /.map -->
-          <div class="mapview">
-
-            <div id="Map" class="map" >
-                <svg xmlns="w3.org/2000/svg" version="1.1" style="width:100%; height:500px">
-                    <defs>
-                        <filter id='dropshadow'>
-                            <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                            <feOffset dx='1' dy='1' result='offsetblur' />
-                            <feMerge>
-                                <feMergeNode />
-                                <feMergeNode in='SourceGraphic' />
-                            </feMerge>
-                        </filter>
-                    </defs>
-                </svg>
-            </div>
     
+    <head data-dir="{{:dir}}">
+    
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico">
+    
+      <title>QButterfly | Form</title>
+    
+      <!-- Bootstrap core CSS -->
+      <link href="{{:dir}}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="{{:dir}}/vendor/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    
+      <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+      <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+      <script src="{{:dir}}/vendor/bootstrap/js/ie-emulation-modes-warning.js"></script>
+    
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    
+      <!-- Custom styles for this template -->
+      <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+      <link href="{{:dir}}/vendor/bootstrap/css/form.css" rel="stylesheet">
+      <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+
+      <script src="{{:dir}}/views/custom.js" defer></script>
+
+    </head>
+
+<body>
+
+    <div class="container-qbackground">
+      
+        <div class="navbar-wrapper">
+            <div class="container">
+                <nav class="navbar navbar-custom">
+                    <div class="container">
+  
+                      <div class="navbar-header">
+                          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </button>
+                          <a class="navbar-brand" href="#">Quantum Butterfly</a>
+                      </div>
+  
+                      <div id="navbar" class="navbar-collapse collapse">
+                          <ul class="nav navbar-nav">
+                            <li><a href="{{:dir}}/home">Home</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setting<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="{{:dir}}/guide">Tutorial</a></li>
+                                  <li role="separator" class="divider"></li>
+                                  <li class="dropdown-header">Account</li>
+                                  <li><a href="{{:dir}}/login">Log in</a></li>
+                                  <li><a href="{{:dir}}/register">Register</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#contact">Contact</a></li>
+                          </ul>
+                      </div>
+  
+                    </div>
+                </nav>
+            </div>
         </div>
+    <br>
+    <div class="card">
+        
+            <div style="
+            min-width: 768px;
+            max-width: 1140px;
+            width: 100%;
+            margin-top: 80px;
+            margin: auto 0;
+            background-color: #F5F5F5;
+            padding: 60px;
+            display: grid;">
 
-<!-- /.map -->
+            
+                <div class="pink-box">
+                    Upload your images
+                </div>
 
-          <br><br>
-          <p class="s-heading2"> How accurate is this location (in meters)? </p>
-          <p class="s-body" style="font-size: larger"> A large, strong flying butterfly. </p>
-          <br>
-          <p class="s-heading2"> Any Notes? </p>
-          <p class="s-body" style="font-size: larger"> A large, strong flying butterfly. </p>
-          <br>
+                <div class="pink-box">
+                    Get my current Location
+                </div>
+    
+                <div class="text-box">
+                    Search for a location.
+                </div>
+    
+                
+                <div style="
+                    background-color: #fff;
+                    padding: 10px;
+                    display: grid;
+                    grid-gap: 10px;
+                    grid-template-columns: 2fr 3fr;
+                    grid-gap: 10px;">
+                    <div style="grid-column: 1;">
+                        
+                    <div id="btnLocate" class="mybtn" style="text-align: center; grid-row: 2; grid-column: 2/1">
+                        <p style="text-align: center;vertical-align:middle;">Current Location</p>
+                    </div>
+    
 
-          <label class="check_container">
-              <p>  Yes, I have read and agree to the terms and conditions. <a href="#"> Content Ownership.</a></p>
-              <input id="ownership_agreement" type="checkbox" checked="checked">
-              <span class="checkmark"></span>
-          </label>
+                        <div id="Map">
+                            <div class="_attribution">
+                                <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>;
+                                <a target="_blank" href="https://leafletjs.com/">Leaflet</a>;
+                                <a target="_blank" href="https://www.mapbox.com">© Mapbox</a>;
+                                <a target="_blank" href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>
+                            </div>
+                        </div>
+                    </div>
 
-          <br>
-          <div class="container-species100-form-btn p-t-10">
-              <button class="species100-form-btn" id="btnform" type="submit" disabled>
-                Submit
-              </button>
-          </div>
-          <br>
-          </div>
-          <br>
+                    <div style="grid-column: 2;">
+                        <div class="text-box">
 
-        </div>
-      </div>
-      <div class="container marketing">
-          <br><br>
-          <!-- FOOTER -->
-          <footer>
-              <p class="pull-right"><a href="#">Back to top</a></p>
-              <p>&copy; &middot; <a href="#">Geolytix</a> &middot; </p>
-          </footer>
-      </div>
+                                    <p class="s-heading2"> How accurate is this location (in meters)? </p>
+                      
+                                    <select name="number" class="number-select">
+                                          <option selected>How accurate is this location (in meters)?</option>
+                                          <option value="0">0-25</option>
+                                          <option value="25">25-50</option>
+                                          <option value="50">50-100</option>
+                                          <option value="100">100-500</option>
+                                          <option value="500">500-1000</option>
+                                          <option value="1000">>1000</option>
+                                    </select>
+
+
+                            <p class="s-heading2"> Date </p>
+
+
+                            <select name="number" class="number-select">
+                                    <option selected>How many butterflies did you saw?</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                            </select>
+
+                            <br>
+                            <br>
+
+                            <label class="check_container">
+                                <p>  Is it a new species? </p>
+                                <input id="privacy_agreement" type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            
+                            <br>
+                            <p class="s-heading2"> Any Notes? </p>
+                            <input type="text" class="form-control" id="notes" name="usernotes">
+                            <br>
+
+                            <br>
+                            <p class="s-heading2"> Any Reference? </p>
+                            <input type="text" class="form-control" id="notes" name="usernotes">
+                            <br>
+
+                            <label class="check_container">
+                                    <p>  Yes, I have read and agree to the terms and conditions. <a href="#"> Content Ownership.</a></p>
+                                    <input id="ownership_agreement" type="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                            </label>
+                            
+
+                        </div>
+                    </div>
+            
+                        
+                        <br>
+            
+                        <div id="List" style="background-color: #fff;"></div>
+            
+                </div>
+                <br>
+                <div class="mybtn p-t-10">
+                        <button class="mybtn" id="btnform" type="submit">
+                          Submit
+                        </button>
+                </div>
     </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{:dir}}/vendor/bootstrap/js/jquery.min.js"></script>
-    <script src="{{:dir}}/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="{{:dir}}/vendor/bootstrap/js/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="{{:dir}}/vendor/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-
+</body>
 
 </html>

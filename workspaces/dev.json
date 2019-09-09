@@ -16,18 +16,71 @@
                 },
 
                 "Cluster Catchments": {
+                    "display": true,
                     "format": "cluster",
                     "dbs": "XYZ",
-                    "table": "survey",
+                    "table": "butterfly",
                     "geom_4326": "geom",
-                    "qID": "id",
+                    "qID": "servey_id",
                     "edit": {
                         "point": true
                     },
                     "infoj": [
                         {
-                            "label": "Ptest",
-                            "field": "ptest",
+                            "label": "butterfly_number",
+                            "field": "butterfly_number",
+                            "type": "int",
+                            "edit": "true"
+                        },
+                        {
+                            "label": "butterfly_location",
+                            "field": "geom",
+                            "type": "int",
+                            "edit": "true"
+                        },
+                        {
+                            "label": "found_date",
+                            "field": "found_date",
+                            "type": "date",
+                            "edit": "true"
+                        },{
+                            "label": "butterfly_species",
+                            "field": "butterfly_species",
+                            "type": "char",
+                            "edit": "true"
+                        },{
+                            "label": "image",
+                            "field": "images_link",
+                            "type": "images",
+                            "edit": "true"
+                        },{
+                            "label": "user_name",
+                            "field": "user_name",
+                            "type": "text",
+                            "edit": "true"
+                        },{
+                            "label": "content_ownship",
+                            "field": "content_ownship",
+                            "type": "boolean",
+                            "edit": "true"
+                        },{
+                            "label": "new_species",
+                            "field": "new_species",
+                            "type": "boolean",
+                            "edit": "true"
+                        },{
+                            "label": "known_species",
+                            "field": "known_species",
+                            "type": "boolean",
+                            "edit": "true"
+                        },{
+                            "label": "notes",
+                            "field": "notes",
+                            "type": "text",
+                            "edit": "true"
+                        },{
+                            "label": "reference",
+                            "field": "reference",
                             "type": "text",
                             "edit": "true"
                         }

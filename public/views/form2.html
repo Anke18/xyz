@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+
+<p>Click the button to create a File Upload Button.</p>
+
+  <form id="form1" runat="server" action="{{:dir}}/img/userphotoes/" method="post" enctype="multipart/form-data">
+    <input type='file' id="imgInp" />
+    <img id="blah" src="#" alt="your image" />
+    <input type="submit" value="Submit"/>
+  </form>
+
+  <script src="{{:dir}}/vendor/jquery/jquery-3.2.1.min.js"></script>
+  <script src="{{:dir}}/vendor/jquery/jquery.form.js"></script>
+  <script src="{{:dir}}/views/form.js"></script>
+
+</body>
+
+</html>
